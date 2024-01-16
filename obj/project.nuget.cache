@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "tXPSqlh0lM1j2C3+Tb5EYbWGkGlTHcCVRGVjAr4WUbdphPBiddBBL9w7F+Mq2iy7aGeVMx2wBgvWV2pO4Ol2LA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\nikha\\RiderProjects\\CountriesCapitalTelegramBot\\CountriesCapitalTelegramBot.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\nikha\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\nikha\\.nuget\\packages\\restsharp\\110.2.0\\restsharp.110.2.0.nupkg.sha512",
+    "C:\\Users\\nikha\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
+    "C:\\Users\\nikha\\.nuget\\packages\\system.text.json\\7.0.2\\system.text.json.7.0.2.nupkg.sha512",
+    "C:\\Users\\nikha\\.nuget\\packages\\telegram.bot\\19.0.0\\telegram.bot.19.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\nikha\\RiderProjects\\CountriesCapitalTelegramBot\\obj\\project.nuget.cache : Found invalid data while decoding."
+    }
+  ]
+}

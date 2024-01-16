@@ -1,11 +1,19 @@
-﻿namespace CountriesCapitalTelegramBot.Entities;
+﻿using CountriesCapitalTelegramBot.Models;
 
-public class CountryStorage
+namespace CountriesCapitalTelegramBot.Entities;
+
+public class CountryStorage : ICountryStorage<CountryInformation>
 {
-    private IList<CountryStorage> _countryStorage;
+    private IList<CountryInformation> _countryStorage;
 
-    public CountryStorage(IList<CountryStorage> countryStorage)
+    public CountryStorage(IList<CountryInformation> countryStorage)
     {
         _countryStorage = countryStorage;
+    }
+
+    public CountryInformation? FindCountryByCapital(string capital)
+    {
+        return _countryStorage.FirstOrDefault(country =>
+            string.Equals(country.Capital, capital, StringComparison.Ordinal));
     }
 }

@@ -1,4 +1,7 @@
-﻿using CountriesCapitalTelegramBot.Services;
+﻿using System.Collections.ObjectModel;
+using CountriesCapitalTelegramBot.Entities;
+using CountriesCapitalTelegramBot.Models;
+using CountriesCapitalTelegramBot.Services;
 using RestSharp;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -9,6 +12,10 @@ using Telegram.Bot.Types.Enums;
 var jsonService = new ConfigJsonService(@"..\..\..\Config.json");
 ITelegramBotClient telegramBotClient =
     new TelegramBotClient(jsonService.GetTelegramBotApiFromConfigJson() ?? throw new NullReferenceException(nameof(jsonService)));
+
+var countryStorage =
+    new CountryStorage(await new ReceivingCountryInformationService(jsonService.GetAllCountriesApiFromConfigJson())
+        .GetCountries());
 
 using CancellationTokenSource cts = new ();
 ReceiverOptions receiverOptions = new ()
@@ -42,14 +49,22 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
     Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-    if (string.Equals(messageText, @"\country", StringComparison.Ordinal))
+    if (string.Equals(messageText, @"/country", StringComparison.Ordinal))
     {
         var sentMessageAsking = await botClient.SendTextMessageAsync(
             chatId: chatId,
             text: "Please say the capital of this country:\n" + messageText,
             cancellationToken: cancellationToken);
 
-        HandleUpdateAsync(botClient, update, cancellationToken);
+        var capitalInput = update.Message;
+        Console.WriteLine(update.Message);
+
+        var a = countryStorage.FindCountryByCapital("Moscow"); 
+        sentMessageAsking = await botClient.SendTextMessageAsync(
+            chatId: chatId,
+            text: "Please say the capital of this country:\n" + messageText,
+            cancellationToken: cancellationToken);
+        
     }
 }
 
