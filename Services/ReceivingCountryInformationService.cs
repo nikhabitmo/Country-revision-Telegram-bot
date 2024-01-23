@@ -23,6 +23,7 @@ public class ReceivingCountryInformationService
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
+                // Console.WriteLine(content);
                 List<CountryInformation> countries = JsonConvert.DeserializeObject<List<CountryInformation>>(content);
                 return countries;
             }

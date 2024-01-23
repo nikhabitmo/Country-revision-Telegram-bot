@@ -17,6 +17,8 @@ var countryStorage =
     new CountryStorage(await new ReceivingCountryInformationService(jsonService.GetAllCountriesApiFromConfigJson())
         .GetCountries());
 
+var chatIDandCountires = new Dictionary<long, CountryInformation>();
+
 using CancellationTokenSource cts = new ();
 ReceiverOptions receiverOptions = new ()
 {
@@ -48,23 +50,52 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
     var chatId = message.Chat.Id;
 
     Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
+    
+    var randomCountry = await countryStorage.GetRandomCountry();
 
     if (string.Equals(messageText, @"/country", StringComparison.Ordinal))
     {
-        var sentMessageAsking = await botClient.SendTextMessageAsync(
+        chatIDandCountires.Add(chatId, randomCountry);
+        await botClient.SendTextMessageAsync(
             chatId: chatId,
-            text: "Please say the capital of this country:\n" + messageText,
+            text: "Please say the capital of this country: " + randomCountry.Name.Official + " (" + randomCountry.Name.Common + ")",
             cancellationToken: cancellationToken);
-
-        var capitalInput = update.Message;
-        Console.WriteLine(update.Message);
-
-        var a = countryStorage.FindCountryByCapital("Moscow"); 
-        sentMessageAsking = await botClient.SendTextMessageAsync(
-            chatId: chatId,
-            text: "Please say the capital of this country:\n" + messageText,
-            cancellationToken: cancellationToken);
+    }
+    else
+    {
+        if (update.Message is not { } messageCapital)
+            return;
+        if (message.Text is not { } capitalText)
+            return;
         
+        capitalText = messageCapital.Text;
+        Console.WriteLine(capitalText);
+
+        if (!chatIDandCountires.TryGetValue(chatId, out randomCountry))
+        {
+            return;
+        }
+        
+        string correctAnswer = randomCountry.Capital.FirstOrDefault();
+        chatIDandCountires.Remove(chatId);
+        if (capitalText != null)
+        {
+            if (String.Compare(capitalText, correctAnswer, StringComparison.Ordinal) == 0)
+            {
+                correctAnswer = "That's right!";
+            }
+            else
+            {
+                correctAnswer = "That's not true" + $" The capital of the {randomCountry.Name.Official} is {randomCountry.Capital.FirstOrDefault()}";
+            }
+        }
+        
+        Console.WriteLine(chatIDandCountires.Count);
+        
+        await botClient.SendTextMessageAsync(
+            chatId: chatId,
+            text: correctAnswer,
+            cancellationToken: cancellationToken);
     }
 }
 

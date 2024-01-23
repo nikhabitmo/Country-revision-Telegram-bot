@@ -1,27 +1,42 @@
-﻿namespace CountriesCapitalTelegramBot.Models;
+﻿using Newtonsoft.Json;
+
+namespace CountriesCapitalTelegramBot.Models;
 
 public class CountryInformation
 {
     public CountryInformation(
-        string commonName, 
-        string officialName, 
-        string capital, 
-        string population, 
-        IList<string> languages, 
-        string flagImageUrl)
+        NameInfo nameInfo,
+        List<string>? capital
+        // string population, 
+        // IList<string> languages, 
+        // string flagImageUrl)
+    )
     {
-        CommonName = commonName;
-        OfficialName = officialName;
+        Name = nameInfo;
         Capital = capital;
-        Population = population;
-        Languages = languages;
-        FlagImageUrl = flagImageUrl;
+        // Population = population;
+        // Languages = languages;
     }
+    
+    [JsonProperty("name")]
+    public NameInfo? Name { get; set; }
+    
+    [JsonProperty("capital")]
+    public List<string>? Capital { get; set; }
+    
+    // [JsonProperty("population")]
+    // public string Population { get; set; }
+    //
+    // [JsonProperty("languages")]
+    // public IList<string> Languages { get; set; }
+}
 
-    public string CommonName { get; set; }
-    public string OfficialName { get; set; }
-    public string Capital { get; set; }
-    public string Population { get; set; }
-    public IList<string> Languages { get; set; }
-    public string FlagImageUrl { get; set; }
+
+public class NameInfo
+{
+    [JsonProperty("common")]
+    public string Common { get; set; }
+
+    [JsonProperty("official")]
+    public string Official { get; set; }
 }
