@@ -55,7 +55,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
     if (string.Equals(messageText, @"/country", StringComparison.Ordinal))
     {
-        chatIDandCountires.Add(chatId, randomCountry);
+        chatIDandCountires.TryAdd(chatId, randomCountry);
         await botClient.SendTextMessageAsync(
             chatId: chatId,
             text: "Please say the capital of this country: " + randomCountry.Name.Official + " (" + randomCountry.Name.Common + ")",
@@ -94,7 +94,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         
         await botClient.SendTextMessageAsync(
             chatId: chatId,
-            text: correctAnswer,
+            text: correctAnswer + " а физика для пидоров!",
             cancellationToken: cancellationToken);
     }
 }
